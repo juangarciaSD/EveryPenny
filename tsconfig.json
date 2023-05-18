@@ -17,11 +17,16 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "jsx": "preserve",
+    "baseUrl": ".",
     "plugins": [
       {
         "name": "next"
       }
-    ]
+    ],
+    "paths": {
+      "ui/components/*": ["components/*"],
+      "lib/*": ["lib/*"]
+    }
   },
   "include": [
     "next-env.d.ts",
