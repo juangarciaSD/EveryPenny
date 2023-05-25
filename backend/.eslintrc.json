@@ -1,0 +1,25 @@
+{
+  "env": {
+    "browser": true,
+    "es2021": true
+  },
+  "extends": "standard-with-typescript",
+  "overrides": [],
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "ecmaVersion": "latest",
+    "sourceType": "module"
+  },
+  "plugins": ["@typescript-eslint"],
+  "rules": {
+    "quotes": ["warn", "double"],
+    "semi": ["warn", "always"],
+    "no-multi-spaces": ["warn"],
+    "eqeqeq": ["warn", "always"],
+    "no-duplicate-case": ["warn"],
+    "no-extra-semi": ["warn"],
+    "no-unreachable": ["warn"],
+    "default-case": ["warn"],
+    "default-case-last": ["warn"]
+  }
+}
