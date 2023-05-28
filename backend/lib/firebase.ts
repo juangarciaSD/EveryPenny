@@ -1,16 +1,13 @@
+import firebaseAdmin from "firebase-admin"
 import { initializeApp } from "firebase-admin/app";
+import { getAuth } from "firebase-admin/auth"
 import dotenv from "dotenv";
+import * as serviceAccount from "../easypenny-firebase-sdk.json";
 
 dotenv.config();
 
-const firebaseConfig = {
-    apiKey: process.env.FIREBASE_API_KEY,
-    authDomain: process.env.FIREBASE_AUTH_DOMAIN,
-    projectId: process.env.FIREBASE_PROJECT_ID,
-    storageBucket: process.env.FIREBASE_STORAGE_BUCKET,
-    messagingSenderId: process.env.FIREBASE_MESSAGING_ID,
-    appId: process.env.FIREBASE_APP_ID,
-    measurementId: process.env.FIREBASE_MEASUREMENT_ID
-};
+export const defaultApp = initializeApp({
+    credential: firebaseAdmin.credential.cert(JSON.parse(JSON.stringify(serviceAccount)))
+});
 
-const app = initializeApp(firebaseConfig);
+export let defaultAuth = getAuth(defaultApp)

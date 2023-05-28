@@ -1,21 +1,31 @@
+import csrf from "csurf";
 import express from "express";
 import bodyParser from "body-parser";
 import "./lib/firebase";
 import { v4 } from "uuid";
+import cookieParser from "cookie-parser";
+import session from "express-session";
 
-import { getAuth } from "firebase-admin/auth"
+import { getAuth } from "firebase-admin/auth";
+
 //queries
-import { createUser, getUser, deleteUser } from "./queries/auth"
+import { createUser, getUser, deleteUser } from "./queries/auth";
 
 const app = express();
 
+var csrfProtection = csrf({ cookie: true });
+
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use(bodyParser.json())
+app.use(bodyParser.json());
+app.use(cookieParser());
 
 let uuid = v4();
 
-app.get('/', (_req, res) => {
-    res.send("hello")
+
+
+app.get('/', csrfProtection, (req, res) => {
+    //@ts-ignore
+    res.send({ csrfToken: req.csrfToken()})
 });
 
 app.post('/auth/create', async(req, res) => {
@@ -29,12 +39,11 @@ app.post('/auth/create', async(req, res) => {
         password: req.body.password
     });
 
-    getAuth().createSessionCookie(user.uuid, { expiresIn }).then((sessionCookie) => {
-        const options = { maxAge: expiresIn, httpOnly: true, secure: true };
-        res.cookie('session', sessionCookie, options);
-    }, (error) => { res.status(401).send(`UNAUTHORIZED REQUEST ${error}`)});
-
-    res.send({ success: true, data: user })
+    // await getAuth().createSessionCookie(user.uuid, { expiresIn }).then((sessionCookie) => {
+    //     const options = { maxAge: expiresIn, httpOnly: true, secure: true };
+    //     res.cookie('session', sessionCookie, options);
+    //     res.send({ success: true, data: user })
+    // }, (error) => { res.status(401).send(`UNAUTHORIZED REQUEST ${error}`)});
 });
 
 app.get("/auth/user/:uuid", async(req, res) => {
@@ -50,11 +59,12 @@ app.post("/user/delete/:uuid", async(req, res) => {
         uuid: req.params.uuid
     });
 
-    res.send({ success: true, userDeleted: user})
+    res.send({ success: true, userDeleted: user});
 });
 
-//sign in user
+//create session
+
 
 app.listen(4000, () => {
-    console.log("express has started the api connection...")
+    console.log("express has started the api connection...");
 });
