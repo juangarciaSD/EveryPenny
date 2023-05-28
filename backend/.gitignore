@@ -4,3 +4,5 @@ yarn-error.log
 dist
 
 .env
+
+easypenny-firebase-sdk.json
