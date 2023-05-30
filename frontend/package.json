@@ -23,7 +23,6 @@
     "typescript": "^5.0.4"
   },
   "dependencies": {
-    "dotenv": "^16.0.3",
     "firebase": "^9.22.1",
     "module-alias": "^2.2.2",
     "next": "^13.4.2",

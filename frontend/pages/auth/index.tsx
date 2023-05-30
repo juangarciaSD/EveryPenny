@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Div from "ui/components/Div";
 import { 
     Form,
@@ -16,6 +16,13 @@ import { emailRegex } from "lib/Constants";
 import { ReactComponent as EmailSVG} from "../../public/svg/auth/email.svg";
 import { ReactComponent as PasswordSVG} from "../../public/svg/auth/password.svg";
 import Link from "next/link";
+import { firebaseSignIn } from "lib/auth";
+
+import { getApps } from "firebase/app"
+import auth from "firebase/auth";
+
+console.log(getApps())
+
 const Auth = () => {
     const theme = useTheme();
 
@@ -23,6 +30,14 @@ const Auth = () => {
     const [email, setEmail] = React.useState<string>("");
     const [password, setPassword] = React.useState<string>("");
     const [disabled, setDisabled] = React.useState<boolean>(true);
+
+    const [csrfToken, setCsrfToken] = React.useState<string>("");
+
+    //get crsf token
+    useEffect(() => {
+        fetch(`${process.env.API_DOMAIN}/`).then(res => res.json()).
+        then(data => setCsrfToken(data['csrfToken']))
+    }, []);
 
     React.useEffect(() => {
         if(password !== "" && email.match(emailRegex)) {
@@ -32,9 +47,15 @@ const Auth = () => {
         }
     }, [email, password]);
 
+    const triggerAuth = async() => {
+        const info = await firebaseSignIn(email, password, csrfToken);
+        console.log("done?", info)
+    }
+
     return(
         <>
         <Div
+            borderRadius={0}
             display="flex"
             justifyContent="center"
             alignSelf="center"
@@ -83,6 +104,7 @@ const Auth = () => {
                             <PasswordSVG />
                         </div>
                 </InputDiv>
+                <input type="hidden" name="_csrf" value={csrfToken} />
                 <Button
                     type="submit"
                     borderRadius="0.5rem"
@@ -93,6 +115,7 @@ const Auth = () => {
                     fontWeight={700}
                     marginTop="2rem"
                     padding="0.75rem"
+                    onClick={triggerAuth}
                     disabled={disabled}>
                     Login
                 </Button>

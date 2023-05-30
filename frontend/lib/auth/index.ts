@@ -1,17 +1,35 @@
-import auth from "firebase/auth";
-import { getCookie } from "lib/getCookie";
+import "lib/firebase";
+import firebase from "firebase/app"
+import { getAuth, signOut, signInWithEmailAndPassword, inMemoryPersistence } from "firebase/auth";
 
-auth.getAuth().setPersistence(auth.inMemoryPersistence);
+getAuth().setPersistence(inMemoryPersistence);
 
-export const firebaseSignIn = (email: string, password: string) => {
-    auth.signInWithEmailAndPassword(auth.getAuth(), email, password).then(data => {
+export const firebaseSignIn = (email: string, password: string, csrfToken) => {
+    signInWithEmailAndPassword(getAuth(), email, password).then(data => {
+        console.log("working")
         return data.user.getIdToken().then(idToken => {
-            const csrfToken = getCookie("csrfToken");
-            //send request to get session login
+            console.log({
+                idToken,
+                csrfToken,
+                lol: true
+            })
+            fetch(`${process.env.API_DOMAIN}/auth/login`, {
+                method: "POST",
+                credentials: "same-origin",
+                headers: {
+                    "Content-Type": "application/json",
+                    "xsrf-token": csrfToken
+                }
+            }).then(res => console.log(res))
+            .then(data => {
+                console.log("some data", data)
+                return data;
+            })
         })
     }).then(() => {
-        return auth.getAuth().signOut();
+        return signOut(getAuth());
     }).then(() => {
-        window.location.assign("/profile");
+        console.log("so success???")
+        // window.location.assign("/profile");
     })
 };

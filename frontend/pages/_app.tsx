@@ -8,7 +8,7 @@ const AppContainer: NextPage<AppProps> = ({ Component, pageProps }) => {
     return(
         <ThemeProvider theme={DarkTheme}>
             <AppProvider value={{
-                theme: "light",
+                theme: "dark",
                 setTheme: theme => {return}
             }}>
                 <Component {...pageProps}/>
