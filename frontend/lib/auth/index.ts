@@ -1,11 +1,29 @@
+import React from "react";
 import "lib/firebase";
 import firebase from "firebase/app"
-import { getAuth, signOut, signInWithEmailAndPassword, inMemoryPersistence } from "firebase/auth";
+import { getAuth, signOut, signInWithEmailAndPassword, User, setPersistence, browserSessionPersistence, onAuthStateChanged } from "firebase/auth";
 
-getAuth().setPersistence(inMemoryPersistence);
+setPersistence(getAuth(), browserSessionPersistence);
 
+//get current user
+export const getCurrentUser = async(): Promise<User | null> => {
+    let user = fetch(`${process.env.API_DOMAIN}/user/current`, {
+        method: "GET",
+        credentials: "include",
+        headers: {
+            "Content-Type": "application/json"
+        }
+    }).then(res => res.json())
+    .then((data) => {
+        console.log("current user", data)
+        return data.user;
+    });
+    return user;
+};
+
+//sign in user to be able to get session cookie
 export const firebaseSignIn = (email: string, password: string, csrfToken) => {
-    signInWithEmailAndPassword(getAuth(), email, password).then(data => {
+    let data = signInWithEmailAndPassword(getAuth(), email, password).then(data => {
         console.log("working")
         return data.user.getIdToken().then(idToken => {
             console.log({
@@ -15,21 +33,41 @@ export const firebaseSignIn = (email: string, password: string, csrfToken) => {
             })
             fetch(`${process.env.API_DOMAIN}/auth/login`, {
                 method: "POST",
-                credentials: "same-origin",
+                credentials: "include",
                 headers: {
-                    "Content-Type": "application/json",
-                    "xsrf-token": csrfToken
-                }
-            }).then(res => console.log(res))
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    idToken
+                })
+            }).then(res => {
+                console.log("cookies", res.headers)
+                res.json()
+            })
             .then(data => {
                 console.log("some data", data)
                 return data;
             })
         })
     }).then(() => {
-        return signOut(getAuth());
-    }).then(() => {
         console.log("so success???")
-        // window.location.assign("/profile");
-    })
+        return { success: true }
+    }).catch(e => {
+        console.log("error has occured while trying to login")
+        return { success: false }
+    });
+    return data;
 };
+
+// //sign out
+export const clearSession = () => {
+    signOut(getAuth());
+    fetch(`${process.env.API_DOMAIN}/auth/signout`, {
+        method: "GET",
+        credentials: "include"
+    }).then(res => res.json())
+    .then(data => {
+        console.log("user should be signed out", data)
+    });
+    //send request to delete cookie to server
+}

@@ -11,6 +11,7 @@ import {
 import Button from "ui/components/Button";
 import { useTheme } from "styled-components";
 import { emailRegex } from "lib/Constants";
+import { useRouter } from "next/router";
 
 //svg
 import { ReactComponent as EmailSVG} from "../../public/svg/auth/email.svg";
@@ -18,12 +19,8 @@ import { ReactComponent as PasswordSVG} from "../../public/svg/auth/password.svg
 import Link from "next/link";
 import { firebaseSignIn } from "lib/auth";
 
-import { getApps } from "firebase/app"
-import auth from "firebase/auth";
-
-console.log(getApps())
-
 const Auth = () => {
+    const router = useRouter();
     const theme = useTheme();
 
     // react states
@@ -47,10 +44,16 @@ const Auth = () => {
         }
     }, [email, password]);
 
-    const triggerAuth = async() => {
+    const triggerAuth = async(e) => {
+        console.log(e.keyCode)
+        if(e.keyCode != 13 || disabled) return;
         const info = await firebaseSignIn(email, password, csrfToken);
-        console.log("done?", info)
-    }
+        if(info.success) router.push("/");
+    };
+
+    React.useEffect(() => {
+        router.prefetch('/');
+    }, [router]);
 
     return(
         <>
@@ -93,6 +96,7 @@ const Auth = () => {
                             <FormInput
                                 value={password}
                                 onChange={event => setPassword(event.target.value)}
+                                onKeyDown={event => triggerAuth(event)}
                                 id="password-text-field"
                                 type="password"
                                 autoComplete="current-password"
