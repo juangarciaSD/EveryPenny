@@ -45,10 +45,10 @@ const Auth = () => {
     }, [email, password]);
 
     const triggerAuth = async(e) => {
-        console.log(e.keyCode)
-        if(e.keyCode != 13 || disabled) return;
-        const info = await firebaseSignIn(email, password, csrfToken);
-        if(info.success) router.push("/");
+        if(e.keyCode === 13 || e.type === "click") {
+            const info = await firebaseSignIn(email, password, csrfToken);
+            if(info.success) router.push("/");
+        } else return;
     };
 
     React.useEffect(() => {
@@ -119,7 +119,7 @@ const Auth = () => {
                     fontWeight={700}
                     marginTop="2rem"
                     padding="0.75rem"
-                    onClick={triggerAuth}
+                    onClick={e => triggerAuth(e)}
                     disabled={disabled}>
                     Login
                 </Button>

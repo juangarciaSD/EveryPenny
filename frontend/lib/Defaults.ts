@@ -90,6 +90,7 @@ export interface DefaultProps {
 
     hoverBackgroundColor?: React.CSSProperties["backgroundColor"];
     hoverColor?: React.CSSProperties["color"];
+    hoverOpacity?: React.CSSProperties["opacity"]
     focusBorderColor?: React.CSSProperties["borderColor"];
 
     gridTemplateColumns?: React.CSSProperties["gridTemplateColumns"];
@@ -191,6 +192,7 @@ export const DEFAULT_STYLES = css<DefaultProps>`
     &:hover {
         background-color: ${props => props.hoverBackgroundColor};
         color: ${props => props.hoverColor};
+        opacity: ${props => props.hoverOpacity}
     }
 
     &:focus {

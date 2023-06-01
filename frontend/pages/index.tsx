@@ -3,6 +3,7 @@ import React from "react";
 import Button from "ui/components/Button"
 import AppContext from "lib/AppContext"
 import { useRouter } from "next/router";
+import Dashboard from "ui/components/Screen/dashboard";
 
 
 const Index = () => {
@@ -11,18 +12,15 @@ const Index = () => {
     const { user, firebaseUser } = React.useContext(AppContext);
     
     React.useEffect(() => {
-        if(!user || !user && !firebaseUser) router.push('/auth')
-    }, [user])
+        if(!user || !user && !firebaseUser) router.push('/auth');
+        console.log(user, firebaseUser?.email)
+    }, [user, firebaseUser])
 
-    const signOut = () => {
-        clearSession();
-    };
-    return(
-        <>
-            <h1>Hello, Next.JS!</h1>
-            <Button onClick={signOut}>Hello?asdfasdfasdf</Button>
-        </>
-    )
+    if(user) {
+        return <Dashboard />
+    } else {
+        return <h1>Hello World</h1>
+    }
 };
 
 export default Index;

@@ -4,7 +4,9 @@ import "./lib/firebase";
 import { v4 } from "uuid";
 import cookieParser from "cookie-parser";
 import cors from "cors";
-import dotenv from "dotenv"
+import dotenv from "dotenv";
+import { client } from "./lib/plaid";
+import { CountryCode, Products } from "plaid";
 
 dotenv.config();
 
@@ -30,12 +32,14 @@ app.get('/', async(_req, res) => {
     res.send({ data: "hello world" });
 });
 
+//pull current user
 app.get('/user/current', async(req, res) => {
     let token = req.cookies["everypenny-session"] || req.headers["authorization"] || null;
     let user = await GetMe(token);
     res.send({ success: true, user });
 });
 
+//create user
 app.post('/auth/create', async(req, res) => {
     const id = uuid;
     let user = await createUser({
@@ -54,6 +58,7 @@ app.post('/auth/create', async(req, res) => {
     res.send({ success: true, data: user });
 });
 
+//find user with uuid
 app.get("/auth/user/:uuid", async(req, res) => {
     let user = await getUser({
         uuid: req.params.uuid
@@ -62,6 +67,22 @@ app.get("/auth/user/:uuid", async(req, res) => {
     res.send({ success: true, data: user, cookie: req.cookies });
 });
 
+//create session
+app.post("/auth/login", async(req, res) => {
+    let user = await EmailLogin(res, req.body.idToken);
+    res.send({ success: true, data: user })
+});
+
+//signout user
+app.get("/auth/signout", async(_req, res) => {
+    res.clearCookie("everypenny-session", {
+        httpOnly: true,
+        expires: new Date(Date.now() + 60 * 60 * 1000 * 24)
+    });
+    res.send({ success: true });
+});
+
+//delete user account
 app.post("/user/delete/:uuid", async(req, res) => {
     let user = await deleteUser({
         uuid: req.params.uuid
@@ -70,19 +91,22 @@ app.post("/user/delete/:uuid", async(req, res) => {
     res.send({ success: true, userDeleted: user});
 });
 
-//create session
-app.post("/auth/login", async(req, res) => {
-    let user = await EmailLogin(res, req.body.idToken);
-    res.send({ success: true, data: user })
+//create plaid link token
+app.post('/plaid/create_link_token', async(req, res) => {
+    const configs = {
+        user: {
+            client_user_id: req.body.uuid
+        },
+        client_name: 'EveryPenny',
+        products: ["auth", "transactions"]as Array<Products>,
+        country_codes: ["US", "CA"] as Array<CountryCode>,
+        language: "en"
+    };
+
+    const createTokenResponse = await client.linkTokenCreate(configs);
+    res.send({ success: true, data: createTokenResponse.data })
 });
 
-app.get("/auth/signout", async(_req, res) => {
-    res.clearCookie("everypenny-session", {
-        httpOnly: true,
-        expires: new Date(Date.now() + 60 * 60 * 1000 * 24)
-    });
-    res.send({ success: true });
-});
 
 app.listen(4000, () => {
     console.log("express has started the api connection...");

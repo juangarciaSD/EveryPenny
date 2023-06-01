@@ -40,14 +40,7 @@ export const firebaseSignIn = (email: string, password: string, csrfToken) => {
                 body: JSON.stringify({
                     idToken
                 })
-            }).then(res => {
-                console.log("cookies", res.headers)
-                res.json()
-            })
-            .then(data => {
-                console.log("some data", data)
-                return data;
-            })
+            });
         })
     }).then(() => {
         console.log("so success???")
