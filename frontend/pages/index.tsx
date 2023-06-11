@@ -13,7 +13,6 @@ const Index = () => {
     
     React.useEffect(() => {
         if(!user || !user && !firebaseUser) router.push('/auth');
-        console.log(user, firebaseUser?.email)
     }, [user, firebaseUser])
 
     if(user) {

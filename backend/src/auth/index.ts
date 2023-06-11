@@ -24,12 +24,15 @@ export const createUser = async(data: UserInput): Promise<User> => {
             password: data.password,
             displayName: `${data.firstName} ${data.lastName}`,
             uid: data.uuid
+        }).then(firebaseUser => {
+            return firebaseUser;
         }).catch(e => {
             new Error("There was an error while trying to create user account.")
             console.log("firebase error", e)
         });
 
-        return user
+        console.log(firebaseUser, user)
+        return {firebaseUser, user}
     }).catch(e => {
         new Error("There was an error while trying to create user data.")
         return e;

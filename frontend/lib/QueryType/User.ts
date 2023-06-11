@@ -3,6 +3,6 @@ export interface User {
     firstName: string;
     lastName: string;
     phoneNumber: string;
-    uid: string;
+    uuid: string;
     accounts: Array<any>
 }

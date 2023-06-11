@@ -21,9 +21,6 @@ const AppContainer: NextPage<AppProps> = ({ Component, pageProps }) => {
 
     const { pathname, push, ...router } = useRouter();
 
-    //firebase user state
-    const auth = getAuth();
-
     const onAuthStateChanged = React.useCallback(
         async(user: FirebaseUser) => {
             // waiting for page to finish loading

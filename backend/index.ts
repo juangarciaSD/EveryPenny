@@ -49,7 +49,7 @@ app.post('/auth/create', async(req, res) => {
         lastName: req.body.lastName,
         password: req.body.password
     });
-
+    console.log(user)
     // await getAuth().createSessionCookie(user.uuid, { expiresIn }).then((sessionCookie) => {
     //     const options = { maxAge: expiresIn, httpOnly: true, secure: true };
     //     res.cookie('session', sessionCookie, options);
@@ -98,13 +98,25 @@ app.post('/plaid/create_link_token', async(req, res) => {
             client_user_id: req.body.uuid
         },
         client_name: 'EveryPenny',
-        products: ["auth", "transactions"]as Array<Products>,
+        products: ["auth", "identity", "transactions"] as Array<Products>,
         country_codes: ["US", "CA"] as Array<CountryCode>,
         language: "en"
     };
 
     const createTokenResponse = await client.linkTokenCreate(configs);
     res.send({ success: true, data: createTokenResponse.data })
+});
+
+app.post('/plaid/exchange_token', async(req, res) => {
+    let public_token = req.body.public_token;
+    console.log("public token where", public_token);
+    const { data } = await client.itemPublicTokenExchange({
+        public_token
+    });
+
+    const authResponse = await client.authGet({ access_token: data.access_token });
+    console.log(data.access_token, data.item_id, authResponse);
+    res.send({ success: true, data: authResponse.data });
 });
 
 

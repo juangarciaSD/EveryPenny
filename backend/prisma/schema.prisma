@@ -3,7 +3,7 @@
 
 generator client {
   provider = "prisma-client-js"
-  binaryTargets = ["native", "windows", "debian-openssl-1.1.x"]
+  binaryTargets = ["native", "windows", "debian-openssl-1.1.x", "linux-arm64-openssl-1.1.x"]
 }
 
 datasource db {
@@ -19,8 +19,24 @@ model User {
   phoneNumber String?
   uuid String @unique
   accounts Account[]
+  preference UserPreference?
 
   @@id([firstName, lastName])
+}
+
+enum ThemeType {
+  LIGHT
+  DARK
+  SYSTEM
+}
+
+model UserPreference {
+  id Int @default(autoincrement())
+  notifications Boolean @default(true)
+  theme ThemeType @default(LIGHT)
+  usageData Boolean @default(false)
+  user User @relation(fields: [userId], references: [uuid])
+  userId String @unique
 }
 
 model Account {
