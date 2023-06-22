@@ -8,7 +8,7 @@ export interface NavBarProps extends DefaultProps {
 export const Header = styled.header`
     ${DEFAULT_STYLES}
 
-    background-color: #000;
+    background-color: ${props => props.theme.navBarTheme};
 `;
 
 export const HeaderContainer = styled.div`
@@ -17,7 +17,7 @@ export const HeaderContainer = styled.div`
     display: flex;
     justify-content: space-between;
     background-color: transparent;
-    padding: 20px;
+    padding: 21px;
     margin: 0 auto;
 `;
 
@@ -55,7 +55,7 @@ export const NavItem = styled.li<NavBarProps>`
     font-weight: 500;
     position: relative;
     white-space: nowrap;
-    color: ${props => props.isActive ? props.theme.accentColor : "#fff"};
+    color: ${props => props.isActive ? props.theme.accentColor : props.theme.textColor};
 
     :hover {
         transition: color 200ms ease-in-out;

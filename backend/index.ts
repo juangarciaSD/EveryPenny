@@ -12,7 +12,8 @@ dotenv.config();
 
 //queries
 import { createUser, getUser, deleteUser } from "./src/auth";
-import { EmailLogin, GetMe } from "./src/resolvers/AuthenticationResolver";
+import { UserLogin, GetMe } from "./src/resolvers/AuthenticationResolver";
+import { UpdateUser } from "./src/resolvers/UserResolver";
 
 const app = express();
 
@@ -41,21 +42,23 @@ app.get('/user/current', async(req, res) => {
 
 //create user
 app.post('/auth/create', async(req, res) => {
-    const id = uuid;
-    let user = await createUser({
-        uuid: id,
+    let createdUser = await createUser({
+        uuid: req.body.uuid,
         email: req.body.email,
         firstName: req.body.firstName,
         lastName: req.body.lastName,
-        password: req.body.password
+        phoneNumber: req.body.phoneNumber
     });
-    console.log(user)
-    // await getAuth().createSessionCookie(user.uuid, { expiresIn }).then((sessionCookie) => {
-    //     const options = { maxAge: expiresIn, httpOnly: true, secure: true };
-    //     res.cookie('session', sessionCookie, options);
-    //     res.send({ success: true, data: user })
-    // }, (error) => { res.status(401).send(`UNAUTHORIZED REQUEST ${error}`)});
+    console.log(createdUser)
+    //login user after creating account on db
+    let user = await UserLogin(res, req.body.idToken);
     res.send({ success: true, data: user });
+});
+
+//create session
+app.post("/auth/login", async(req, res) => {
+    let user = await UserLogin(res, req.body.idToken);
+    res.send({ success: true, data: user })
 });
 
 //find user with uuid
@@ -67,10 +70,9 @@ app.get("/auth/user/:uuid", async(req, res) => {
     res.send({ success: true, data: user, cookie: req.cookies });
 });
 
-//create session
-app.post("/auth/login", async(req, res) => {
-    let user = await EmailLogin(res, req.body.idToken);
-    res.send({ success: true, data: user })
+app.put("/user/update", async(req, res) => {
+    await UpdateUser(req);
+    res.send({ success: true })
 });
 
 //signout user

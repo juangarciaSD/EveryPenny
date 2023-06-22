@@ -1,8 +1,6 @@
 import { User } from "@prisma/client";
-import { prisma } from "../../lib/prisma";
 import { setSessionCookies, verifySessionToken } from "../auth/session";
-import { MyContext } from "../types/MyContext";
-import { Request, Response } from "express";
+import { Response } from "express";
 
 export async function GetMe(token: string): Promise<User | null> {
     try {
@@ -24,7 +22,7 @@ export async function GetMe(token: string): Promise<User | null> {
     return null;
 };
 
-export async function EmailLogin(
+export async function UserLogin(
     res: Response,
     idToken: string
 ): Promise<User> {

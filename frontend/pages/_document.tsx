@@ -6,7 +6,7 @@ import Document, {
     DocumentContext,
 } from "next/document";
 import * as React from "react";
-import { ServerStyleSheet } from "styled-components";
+import { ServerStyleSheet, useTheme } from "styled-components";
 import Script from "next/script";
 
 // const Font = createGlobalStyle`
@@ -96,6 +96,10 @@ class EveryPenny extends Document {
             
                         *::-webkit-scrollbar:hover {
                             background-color: #242d39;
+                        }
+
+                        #__next {
+                            height: 100%;
                         }
                     `}</style>
                 </Head>

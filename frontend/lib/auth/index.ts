@@ -1,7 +1,6 @@
-import React from "react";
+import { cache } from "react";
 import "lib/firebase";
-import firebase from "firebase/app"
-import { getAuth, signOut, signInWithEmailAndPassword, User, setPersistence, browserSessionPersistence, onAuthStateChanged } from "firebase/auth";
+import { getAuth, signOut, signInWithEmailAndPassword, User, setPersistence, browserSessionPersistence, onAuthStateChanged, createUserWithEmailAndPassword } from "firebase/auth";
 
 setPersistence(getAuth(), browserSessionPersistence);
 
@@ -22,13 +21,15 @@ export const getCurrentUser = async(): Promise<User | null> => {
 };
 
 //sign in user to be able to get session cookie
-export const firebaseSignIn = (email: string, password: string, csrfToken) => {
+export const userSignIn = ({
+    email,
+    password,
+}) => {
     let data = signInWithEmailAndPassword(getAuth(), email, password).then(data => {
         console.log("working")
         return data.user.getIdToken().then(idToken => {
             console.log({
                 idToken,
-                csrfToken,
                 lol: true
             })
             fetch(`${process.env.API_DOMAIN}/auth/login`, {
@@ -51,6 +52,47 @@ export const firebaseSignIn = (email: string, password: string, csrfToken) => {
     });
     return data;
 };
+
+//create user both firebase and db
+export const createUser = ({
+    email,
+    password,
+    firstName,
+    lastName,
+    phoneNumber
+}) => {
+    let data = createUserWithEmailAndPassword(getAuth(), email, password).then(data => {
+        console.log("creating...");
+        return data.user.getIdToken().then(idToken => {
+            console.log({
+                idToken,
+                lol: true
+            });
+            fetch(`${process.env.API_DOMAIN}/auth/create`, {
+                method: "POST",
+                credentials: "include",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    email,
+                    firstName,
+                    lastName,
+                    uuid: data.user.uid,
+                    idToken,
+                    phoneNumber
+                })
+            });
+        }).then(() => {
+            console.log("success on creating account and starting login process");
+            return { success: true }
+        }).catch(e => {
+            console.log("there was an error while trying to create account or redirecting user");
+            return { success: false }
+        });
+    });
+    return data;
+}
 
 // //sign out
 export const clearSession = () => {

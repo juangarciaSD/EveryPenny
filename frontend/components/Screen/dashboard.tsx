@@ -38,7 +38,7 @@ const Dashboard = () => {
         <Div>
             
         </Div>
-        <h1>Hello World</h1>
+        <h1>Hello {context?.user.firstName + " " + context?.user.lastName}</h1>
         <Button onClick={() => getLinkToken()}>
             Link Account
         </Button>
@@ -46,7 +46,5 @@ const Dashboard = () => {
         </>
     );
 };
-
-requireAuth(Dashboard)
 
 export default Dashboard;

@@ -1,6 +1,7 @@
 import React, { ReactEventHandler } from "react";
 import { DropdownItem, DropdownList } from "./styles";
 import { DefaultProps } from "lib/Defaults";
+import Link from "next/link";
 
 interface DefDropdownInterface extends DefaultProps {
     isOpen: boolean;
@@ -16,7 +17,11 @@ const DefDropdown = (props: DefDropdownInterface) => {
         <>
         <DropdownList display={props.isOpen ? "block" : "none"} left={15} top={8}>
             {props.items.map(val => {
-                return <DropdownItem {...val.onClick}>{val.name}</DropdownItem>
+                return (
+                    <Link href={`${val.url ? val.url : "#"}`}>
+                        <DropdownItem onClick={val.onClick}>{val.name}</DropdownItem>
+                    </Link>
+                )
             })}
         </DropdownList>
         </>

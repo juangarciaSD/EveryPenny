@@ -4,10 +4,10 @@ import { getAuth } from "firebase-admin/auth"
 
 interface UserInput {
     email: string;
-    password: string;
     firstName: string;
     lastName: string;
     uuid: string;
+    phoneNumber: string;
 }
 
 export const createUser = async(data: UserInput): Promise<User> => {
@@ -17,25 +17,8 @@ export const createUser = async(data: UserInput): Promise<User> => {
             firstName: data.firstName,
             lastName: data.lastName,
             uuid: data.uuid,
+            phoneNumber: data.phoneNumber || null
         }
-    }).then(async(user) => {
-        var firebaseUser = await getAuth().createUser({
-            email: user.email,
-            password: data.password,
-            displayName: `${data.firstName} ${data.lastName}`,
-            uid: data.uuid
-        }).then(firebaseUser => {
-            return firebaseUser;
-        }).catch(e => {
-            new Error("There was an error while trying to create user account.")
-            console.log("firebase error", e)
-        });
-
-        console.log(firebaseUser, user)
-        return {firebaseUser, user}
-    }).catch(e => {
-        new Error("There was an error while trying to create user data.")
-        return e;
     });
 
     return user;

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import { useTheme } from "styled-components";
 import { Header, HeaderContainer, Logo, NavBarProps, NavButtons, NavItem, NavList } from "./styles";
 import Button from "../Button/DefButton";
@@ -7,10 +7,13 @@ import RoundImage from "../Image/CircleImage";
 import Div from "../Div";
 import { useRouter } from "next/router";
 import DefDropdown from "../Dropdown";
+import Link from "next/link";
+import AppContext from "lib/AppContext"
 
 const NavBar = (props: NavBarProps) => {
     const theme = useTheme();
     const router = useRouter();
+    const { setTheme, theme: currentTheme } = useContext(AppContext)
 
     const [isDropdownOpen, setDropdownStatus] = React.useState<boolean>(false);
 
@@ -21,19 +24,19 @@ const NavBar = (props: NavBarProps) => {
                 <Logo>EveryPenny</Logo>
                 <NavList>
                     <NavItem isActive={router.pathname === "/"}>
-                        <a href="/" style={{ padding: 15 }}>Overview</a>
+                        <Link href="/" style={{ padding: 15 }}>Overview</Link>
                     </NavItem>
                     <NavItem isActive={router.pathname === "/cash_flow"}>
-                        <a href="/" style={{ padding: 15 }}>Cash Flow</a>
+                        <Link href="/" style={{ padding: 15 }}>Cash Flow</Link>
                     </NavItem>
                     <NavItem isActive={router.pathname === "/budget"}>
-                        <a href="/" style={{ padding: 15 }}>Budgeting</a>
+                        <Link href="/" style={{ padding: 15 }}>Budgeting</Link>
                     </NavItem>
                     <NavItem isActive={router.pathname === "/net_worth"}>
-                        <a href="/" style={{ padding: 15 }}>Net Worth</a>
+                        <Link href="/" style={{ padding: 15 }}>Net Worth</Link>
                     </NavItem>
                     <NavItem isActive={router.pathname === "/transactions"}>
-                        <a href="/" style={{ padding: 15 }}>Transactions</a>
+                        <Link href="/" style={{ padding: 15 }}>Transactions</Link>
                     </NavItem>
                 </NavList>
                 {/* remove button since these do not belong on dashboard due to user being authenticated */}
@@ -42,12 +45,17 @@ const NavBar = (props: NavBarProps) => {
                         <RoundImage onClick={() => setDropdownStatus(!isDropdownOpen)} cursor="pointer" width="2.5rem" height="100%" borderRadius="50%" />
                         <DefDropdown isOpen={isDropdownOpen} items={[{
                             name: "Settings",
+                            url: "/settings"
                         }, {
                             name: "Help Center"
                         }, {
                             name: "Feedback"
                         }, {
-                            name: "Toggle Theme"
+                            name: "Toggle Theme",
+                            onClick: () => {
+                                setTheme(currentTheme)
+                                setDropdownStatus(false)
+                            }
                         }]} />
                     </Div>
                     {/* <Button
@@ -79,9 +87,11 @@ const NavBar = (props: NavBarProps) => {
                         height="2.5rem"
                         marginRight="10px"
                         background="transparent"
+                        hoverOpacity={1}
+                        color={`${theme.textColor}`}
                         border={`2px solid ${theme.accentColor}`}
                         hoverBackgroundColor={`${theme.accentColor}`}
-                        hoverOpacity="0.7"
+                        hoverColor={`${theme.darkBgTextColor}`}
                         transition="0.6s">
                         Sign Out
                     </Button>

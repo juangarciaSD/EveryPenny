@@ -9,6 +9,7 @@ export interface ITheme {
     accentColor: string;
     textColor: string;
     secondaryTextColor: string;
+    darkBgTextColor: string;
     lineColor: string;
     red: string;
     // Canvas specific:
@@ -18,12 +19,13 @@ export interface ITheme {
     scrollbar: string;
     modalBg: string;
     arrowBg: string;
+    navBarTheme: string;
 }
 
 // Light Mode (default):
 export const LightTheme: ITheme = {
     themeName: "light",
-    background: "#ffffff",
+    background: "#c9c9c9",
     smallBackground: "#ffffff",
     primaryColor: "#000000",
     secondaryColor: "#1d232d",
@@ -31,6 +33,7 @@ export const LightTheme: ITheme = {
     accentColor: "#4261ee",
     textColor: "#111827",
     secondaryTextColor: "#546884",
+    darkBgTextColor: "#fff",
     canvasBg: "#ffffff",
     lineColor: "#efefee",
     controlBarColor: "#efefef",
@@ -38,6 +41,7 @@ export const LightTheme: ITheme = {
     modalBg: "#fefefe",
     arrowBg: "#f0f0f0",
     red: "#e23a3a",
+    navBarTheme: "#fff"
 };
 
 // Dark Mode:
@@ -51,6 +55,7 @@ export const DarkTheme: ITheme = {
     accentColor: "#4261ee",
     textColor: "#ededee",
     secondaryTextColor: "#546884",
+    darkBgTextColor: "#fff",
     canvasBg: "#151a21",
     lineColor: "#4E5356",
     controlBarColor: "#464C50",
@@ -58,4 +63,5 @@ export const DarkTheme: ITheme = {
     modalBg: "#131313",
     arrowBg: "#131313",
     red: "#e23a3a",
+    navBarTheme: "#000"
 };

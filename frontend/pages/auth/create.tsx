@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import Div from "ui/components/Div";
 import { 
     Form,
@@ -10,54 +10,48 @@ import {
 } from "public/css/auth/login";
 import Button from "ui/components/Button";
 import { useTheme } from "styled-components";
-import { emailRegex } from "lib/Constants";
+import { createUser } from "lib/auth";
 import { useRouter } from "next/router";
-import { userSignIn } from "lib/auth";
 import Link from "next/link";
+
+import { phoneNumberRegex } from "lib/Constants";
 
 //svg
 import { ReactComponent as EmailSVG} from "../../public/svg/auth/email.svg";
 import { ReactComponent as PasswordSVG} from "../../public/svg/auth/password.svg";
 
-const Auth = () => {
+const Create = () => {
     const router = useRouter();
     const theme = useTheme();
 
-    // react states
+    const [phoneNumber, setPhoneNumber] = React.useState("");
+    const [name, setName] = React.useState("");
+
     const [email, setEmail] = React.useState<string>("");
     const [password, setPassword] = React.useState<string>("");
     const [disabled, setDisabled] = React.useState<boolean>(true);
 
-    const [csrfToken, setCsrfToken] = React.useState<string>("");
-
-    //get crsf token
-    useEffect(() => {
-        fetch(`${process.env.API_DOMAIN}/`).then(res => res.json()).
-        then(data => setCsrfToken(data['csrfToken']))
-    }, []);
-
-    React.useEffect(() => {
-        if(password !== "" && email.match(emailRegex)) {
-            setDisabled(false);
-        } else {
-            setDisabled(true)
-        }
-    }, [email, password]);
-
     const triggerAuth = async(e) => {
         if(e.keyCode === 13 || e.type === "click") {
-            const info = await userSignIn({
+            const info = await createUser({
                 email,
-                password
+                password,
+                firstName: name.split(" ")[0],
+                lastName: name.split(" ").slice(1).join(" "),
+                phoneNumber
             });
             if(info.success) router.push("/");
         } else return;
     };
 
     React.useEffect(() => {
-        router.prefetch('/');
-    }, [router]);
-
+        if(phoneNumber != "" && !phoneNumber.match(phoneNumberRegex)) return;
+        if(name && email && password !== "") {
+            setDisabled(false);
+        } else {
+            setDisabled(true);
+        };
+    }, [name, email, password, phoneNumber]);
     return(
         <>
         <Div
@@ -69,9 +63,27 @@ const Auth = () => {
             backgroundColor={theme.arrowBg}>
             <Form backgroundColor={theme.canvasBg}>
                 <Div>
-                    <FormHeader>Sign In</FormHeader>
-                    <FormSubHeader >to continue to EveryPenny</FormSubHeader>
+                    <FormHeader>Sign Up</FormHeader>
+                    <FormSubHeader >to start saving with EveryPenny</FormSubHeader>
                 </Div>
+                <h6 style={{ fontSize: 16, margin: "1.5rem 0 0.75rem 0"}}>
+                    Name
+                </h6>
+                <InputDiv>
+                        <div>
+                            <FormInput
+                                value={name}
+                                onChange={event => setName(event.target.value)}
+                                onKeyDown={event => triggerAuth(event)}
+                                type="text"
+                                borderBottomColor="none"
+                                color={theme.textColor}
+                            />
+                        </div>
+                        <div>
+                            <PasswordSVG />
+                        </div>
+                </InputDiv>
                 <h6 style={{ fontSize: 16, margin: "1.5rem 0 0.75rem 0"}}>
                     Email
                 </h6>
@@ -111,7 +123,25 @@ const Auth = () => {
                             <PasswordSVG />
                         </div>
                 </InputDiv>
-                <input type="hidden" name="_csrf" value={csrfToken} />
+                <h6 style={{ fontSize: 16, margin: "1.5rem 0 0.75rem 0"}}>
+                    Phone Number
+                </h6>
+                <InputDiv>
+                        <div>
+                            <FormInput
+                                value={phoneNumber.replace(/^(\d{3})(\d{3})(\d{4})/, '$1$2$3')}
+                                onChange={event => setPhoneNumber(event.target.value)}
+                                onKeyDown={event => triggerAuth(event)}
+                                type="text"
+                                borderBottomColor="none"
+                                color={theme.textColor}
+                            />
+                        </div>
+                        <div>
+                            <PasswordSVG />
+                        </div>
+                </InputDiv>
+                {/* <input type="hidden" name="_csrf" value={csrfToken} /> */}
                 <Button
                     type="submit"
                     borderRadius="0.5rem"
@@ -124,18 +154,18 @@ const Auth = () => {
                     padding="0.75rem"
                     onClick={e => triggerAuth(e)}
                     disabled={disabled}>
-                    Login
+                    Sign Up
                 </Button>
                 <SubText color={theme.textColor}>
-                    Forgot your password?{" "}
-                    <Link href="/auth/forgot">
-                        <span style={{ color: theme.textColor}}>Reset it.</span>
+                    Already have an account?{" "}
+                    <Link href="/auth">
+                        <span style={{ color: theme.textColor}}>Log in.</span>
                     </Link>
                 </SubText>
             </Form>
         </Div>
         </>
-    )
+    );
 };
 
-export default Auth;
+export default Create;
