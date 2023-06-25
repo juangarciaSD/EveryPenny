@@ -81,6 +81,7 @@ const Create = () => {
                             />
                         </div>
                         <div>
+                            {/* @ts-ignore */}
                             <PasswordSVG />
                         </div>
                 </InputDiv>
@@ -100,6 +101,7 @@ const Create = () => {
                         />
                     </div>
                     <div>
+                        {/* @ts-ignore */}
                         <EmailSVG />
                     </div>
                 </InputDiv>
@@ -120,6 +122,7 @@ const Create = () => {
                             />
                         </div>
                         <div>
+                            {/* @ts-ignore */}
                             <PasswordSVG />
                         </div>
                 </InputDiv>
@@ -138,6 +141,7 @@ const Create = () => {
                             />
                         </div>
                         <div>
+                            {/* @ts-ignore */}
                             <PasswordSVG />
                         </div>
                 </InputDiv>

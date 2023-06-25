@@ -10,7 +10,7 @@ module.exports = {
         API_DOMAIN: "http://localhost:4000"
     },
     webpack5: true,
-    webpack: (config, {dev, isSever}) => {
+    webpack: (config, {dev, isServer}) => {
         if(!dev && !isServer) {
             config.resolve.fallback = {
                 fs: false

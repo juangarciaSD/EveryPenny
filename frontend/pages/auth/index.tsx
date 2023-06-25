@@ -88,6 +88,7 @@ const Auth = () => {
                         />
                     </div>
                     <div>
+                        {/* @ts-ignore */}
                         <EmailSVG />
                     </div>
                 </InputDiv>
@@ -108,6 +109,7 @@ const Auth = () => {
                             />
                         </div>
                         <div>
+                            {/* @ts-ignore */}
                             <PasswordSVG />
                         </div>
                 </InputDiv>
