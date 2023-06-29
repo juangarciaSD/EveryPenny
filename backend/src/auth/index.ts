@@ -17,7 +17,14 @@ export const createUser = async(data: UserInput): Promise<User> => {
             firstName: data.firstName,
             lastName: data.lastName,
             uuid: data.uuid,
-            phoneNumber: data.phoneNumber || null
+            phoneNumber: data.phoneNumber || null,
+            preference: {
+                create: {
+                    theme: "LIGHT",
+                    notifications: false,
+                    usageData: false
+                }
+            },
         }
     });
 

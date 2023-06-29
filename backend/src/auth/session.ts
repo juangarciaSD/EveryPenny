@@ -87,6 +87,9 @@ export async function verifySessionToken(
     const user = await prisma.user.findFirst({
         where: {
             email: firebaseUser.email
+        },
+        include: {
+            accounts: true
         }
     });
 

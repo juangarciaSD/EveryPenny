@@ -6,6 +6,7 @@ dotenv.config();
 console.log({
     'client_id': process.env.PLAID_CLIENT_ID,
     'PLAID-SECRET': process.env.PLAID_DEVELOPMENT_KEY,
+    'Enviroment': process.env.PLAID_ENV
 })
 
 const config = new Configuration({

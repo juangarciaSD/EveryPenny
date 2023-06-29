@@ -3,6 +3,12 @@
         "next/babel"
     ],
     "plugins": [
+        [
+            "tailwind-components", {
+              "config": "./tailwind.js",
+              "format": "auto"
+            }
+        ],
         ["babel-plugin-styled-components", {
         "ssr": true
     }], ["inline-react-svg"]]

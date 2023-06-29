@@ -57,6 +57,10 @@ class EveryPenny extends Document {
                 <Head>
                     <meta charSet="utf-8" />
                     <style>{`
+                        @tailwind base;
+                        @tailwind components;
+                        @tailwind utilities;
+
                         html,
                         body {
                             padding: 0;

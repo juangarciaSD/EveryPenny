@@ -25,6 +25,7 @@ services:
             - postgres
         environment:
             DB_HOST: postgres
+        restart: always
 
 volumes:
     pgdata: {}

@@ -6,7 +6,7 @@ export type ThemeColors = "light" | "dark";
 
 interface ContextType {
     firebaseUser: FirebaseUser;
-    user: Partial<User> | undefined;
+    user: User | undefined;
     setUser: (user: User) => void;
     theme: ThemeColors;
     setTheme: (theme: ThemeColors) => void;

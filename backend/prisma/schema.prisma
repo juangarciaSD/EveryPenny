@@ -11,6 +11,37 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum ThemeType {
+  LIGHT
+  DARK
+  SYSTEM
+}
+
+enum CategoryType {
+  Entertainment
+  Fees
+  Groceries
+  Health
+  Mortgage
+  Restaurants
+  Shopping
+  Transportation
+  Travel
+  Utilites
+  Other
+}
+
+enum FrequencyType {
+  Weekly
+  EveryOtherWeek
+  Monthly
+  EveryOtherMonth
+  Every3months
+  Every6Months
+  Yearly
+  OneTimeOnly
+}
+
 model User {
   id Int @default(autoincrement())
   email String @unique
@@ -20,14 +51,9 @@ model User {
   uuid String @unique
   accounts Account[]
   preference UserPreference?
+  bills Bill[]
 
   @@id([firstName, lastName])
-}
-
-enum ThemeType {
-  LIGHT
-  DARK
-  SYSTEM
 }
 
 model UserPreference {
@@ -42,11 +68,23 @@ model UserPreference {
 model Account {
   id Int @id @default(autoincrement())
   accountId String @unique
-  name String
-  currentBalance Int
+  name String?
+  currentBalance Float?
   currencyCode Int
-  subtype String
+  subtype String?
   type String
+  owner User @relation(fields: [ownerId], references: [uuid])
+  ownerId String
+}
+
+model Bill {
+  id Int @id @default(autoincrement())
+  name String
+  amount Float
+  frequency FrequencyType @default(OneTimeOnly)
+  due_date DateTime
+  category CategoryType @default(Other)
+  paid Boolean @default(false)
   owner User @relation(fields: [ownerId], references: [uuid])
   ownerId String
 }

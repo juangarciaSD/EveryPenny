@@ -30,12 +30,6 @@ const Auth = () => {
 
     const [csrfToken, setCsrfToken] = React.useState<string>("");
 
-    //get crsf token
-    useEffect(() => {
-        fetch(`${process.env.API_DOMAIN}/`).then(res => res.json()).
-        then(data => setCsrfToken(data['csrfToken']))
-    }, []);
-
     React.useEffect(() => {
         if(password !== "" && email.match(emailRegex)) {
             setDisabled(false);

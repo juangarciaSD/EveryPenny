@@ -6,7 +6,7 @@ import cookieParser from "cookie-parser";
 import cors from "cors";
 import dotenv from "dotenv";
 import { client } from "./lib/plaid";
-import { CountryCode, Products } from "plaid";
+import { CountryCode, Products, TransactionsGetRequest } from "plaid";
 
 dotenv.config();
 
@@ -14,6 +14,9 @@ dotenv.config();
 import { createUser, getUser, deleteUser } from "./src/auth";
 import { UserLogin, GetMe } from "./src/resolvers/AuthenticationResolver";
 import { UpdateUser } from "./src/resolvers/UserResolver";
+import { PlaidDataResponse } from "./lib/plaid.interface";
+import { AddAccount } from "./src/resolvers/AccountResolver";
+import { AddBill } from "./src/resolvers/BillResolver";
 
 const app = express();
 
@@ -25,8 +28,6 @@ app.use(cors({
     credentials: true,
     origin: "http://localhost:3000",
 }));
-
-let uuid = v4();
 
 app.get('/', async(_req, res) => {
     //@ts-ignore
@@ -100,27 +101,59 @@ app.post('/plaid/create_link_token', async(req, res) => {
             client_user_id: req.body.uuid
         },
         client_name: 'EveryPenny',
-        products: ["auth", "identity", "transactions"] as Array<Products>,
-        country_codes: ["US", "CA"] as Array<CountryCode>,
-        language: "en"
+        products: ["auth", "transactions"] as Array<Products>,
+        country_codes: ["US"] as Array<CountryCode>,
+        language: "en",
     };
 
-    const createTokenResponse = await client.linkTokenCreate(configs);
+    const createTokenResponse = await client.linkTokenCreate(configs).then(data => {return data}).catch(e => { console.log(e); return e});
     res.send({ success: true, data: createTokenResponse.data })
 });
 
 app.post('/plaid/exchange_token', async(req, res) => {
-    let public_token = req.body.public_token;
-    console.log("public token where", public_token);
     const { data } = await client.itemPublicTokenExchange({
-        public_token
+        public_token: req.body.public_token
     });
 
     const authResponse = await client.authGet({ access_token: data.access_token });
-    console.log(data.access_token, data.item_id, authResponse);
-    res.send({ success: true, data: authResponse.data });
+    const account = authResponse.data.accounts[0];
+    const numbers =  authResponse.data.numbers.ach[0];
+    //build data before saving to database
+    let responseData: PlaidDataResponse = {
+        accounts: {
+            account_id: account.account_id,
+            balances:  {
+                available: account.balances.available,
+                current: account.balances.current
+            },
+            name: account.name,
+            official_name: account.official_name,
+            subtype: account.subtype,
+            type: account.type
+        },
+        numbers: {
+            ach: {
+                account: numbers.account,
+                routing: numbers.routing
+            }
+        }
+    };
+    let addAccountResponse = await AddAccount(responseData, req.body.uuid);
+    res.send({ success: true, data: addAccountResponse[0] });
 });
 
+//bills
+app.post('/user/create/bill', async(req, res) => {
+    const billResponse = await AddBill({
+        name: req.body.name,
+        amount: req.body.amount,
+        frequency: req.body.frequency,
+        due_date: req.body.due_date,
+        category: req.body.category
+    }, req.body.uuid);
+
+    res.send({ success: true, data: billResponse})
+});
 
 app.listen(4000, () => {
     console.log("express has started the api connection...");
