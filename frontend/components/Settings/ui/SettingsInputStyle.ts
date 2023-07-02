@@ -3,6 +3,7 @@ import styled from "styled-components";
 
 interface InputProps { 
     isDisabled?: boolean
+    width?: string
 }
 
 export const InputHeader = styled.p`
@@ -12,11 +13,11 @@ export const InputHeader = styled.p`
     font-weight: 600;
 `;
 
-export const InputHolder = styled.div`
+export const InputHolder = styled.div<InputProps>`
     ${DEFAULT_STYLES}
 
     display: flex;
-    width: 25%;
+    width: ${props => props.width || "25%"};
     border: 2px solid ${props => props.theme.lineColor};
     transition: border 200ms;
     border-radius: 0.375rem;
@@ -37,6 +38,9 @@ export const Input = styled.input<InputProps>`
     font-weight: 500;
     width: 100%;
     color: ${props => props.theme.darkBgTextColor};
+
+    -webkit-appearance: none;
+
 
     ${props => props.isDisabled ? ` 
         color: gray;
