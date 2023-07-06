@@ -89,7 +89,9 @@ export async function verifySessionToken(
             email: firebaseUser.email
         },
         include: {
-            accounts: true
+            accounts: true,
+            bills: true,
+            preference: true
         }
     });
 

@@ -10,27 +10,31 @@ import {
 import { DefaultProps } from "lib/Defaults";
 
 interface DropdownInterface extends DefaultProps {
-    onClick,
+    title: string,
+    setValue: React.Dispatch<React.SetStateAction<string>>,
+    activeValue: string,
     items: Array<{
         name: string
     }>
 }
 
 const Dropdown = (props: DropdownInterface) => {
-
     const [isActive, setActive] = React.useState(false);
-    const [currentValue, setCurrentValue] = React.useState<number>(0);
+
+    React.useEffect(() => {
+        props.setValue(props.items[0].name);
+    }, [])
 
     return(
         <>
-        <InputHeader>Frequent</InputHeader>
+        <InputHeader>{props.title}</InputHeader>
         <InputHolder width="100%">
         <DropdownHolder onClick={() => setActive(!isActive)}>
-            <DropdownValue>{props.items[currentValue].name}</DropdownValue>
+            <DropdownValue>{props.activeValue}</DropdownValue>
             <DropdownList isActive={isActive}>
-                {props.items?.map((data, val) => {
+                {props.items?.map((data) => {
                     return(
-                        <DropdownOption onChange={props.onClick(val)}>{data.name}</DropdownOption>
+                        <DropdownOption onClick={() => props.setValue(data.name)}>{data.name}</DropdownOption>
                     )
                 })}
             </DropdownList>

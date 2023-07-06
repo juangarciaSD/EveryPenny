@@ -1,9 +1,9 @@
 import { prisma } from "../../lib/prisma";
 import { Bill } from "@prisma/client";
 
-interface BillDataInterface extends Omit<Bill, "id" | "ownerId" | "paid"> {}
+interface AddBillDataInterface extends Omit<Bill, "id" | "ownerId" | "paid"> {}
 
-export async function AddBill(data: BillDataInterface, uuid): Promise<Bill> {
+export async function AddBill(data: AddBillDataInterface, uuid): Promise<Bill> {
     try {
         let bill = await prisma.user.update({
             where: {
@@ -33,3 +33,32 @@ export async function AddBill(data: BillDataInterface, uuid): Promise<Bill> {
         return e;
     }
 };
+
+export async function UpdateBill(data: Bill, uuid): Promise<Bill | boolean> {
+    try {
+        if(uuid != data.ownerId) return false;
+        let bill = await prisma.bill.update({
+            where: {
+                id: data.id
+            },
+            data: {
+                name: data.name,
+                amount: data.amount,
+                frequency: data.frequency,
+                due_date: data.due_date,
+                category: data.category,
+                paid: data.paid,
+            }
+        }).then(v => {
+            console.log("updated user bill");
+            return v;
+        }).catch(e => {
+            console.log("error", e);
+            return e;
+        });
+        return bill;
+    } catch(e) {
+        console.log(e);
+        return e;
+    }
+}

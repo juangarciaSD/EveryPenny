@@ -5,6 +5,7 @@ import { ButtonStyle, ButtonProps } from './styles';
 interface IButton extends ButtonProps {
     // displayed text
     text?: string
+    hoverBorder?: string,
 }
 
 const Button: React.FC<
@@ -17,6 +18,7 @@ const Button: React.FC<
             background={(props.backgroundColor || props.bg || props.background) ?? theme.accentColor}
             disabled={props.disabled}
             opacity={props.disabled ? 0.5 : 1}
+            hoverBorder={props.hoverBorder}
             {...props}>
             {props.children ?? props.text}
         </ButtonStyle>

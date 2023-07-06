@@ -5,6 +5,7 @@ interface DropdownInterface {
 }
 
 export const DropdownHolder = styled.div`
+    width: 100%;
 `;
 
 export const DropdownLabel = styled.label``;
@@ -14,6 +15,7 @@ export const DropdownValue = styled.div`
     font-size: 0.875rem;
     margin: 5px 0px;
     cursor: pointer;
+    width: 100%;
 `;
 
 export const DropdownList = styled.div<DropdownInterface>`
@@ -27,11 +29,11 @@ export const DropdownList = styled.div<DropdownInterface>`
     font-size: 0.875rem;
     border-radius: 5px;
     background-color: #000;
-
     margin-top: 8px;
-
+    
     :hover {
         background-color: ${props => props.theme.background};
+        opacity: 0.8;
     }
 `;
 
@@ -39,10 +41,10 @@ export const DropdownOption = styled.div`
     font-weight: 600;
     padding: 5px;
     cursor: pointer;
-    border-radius: 5px;
     background-color: ${props => props.theme.background};
 
-    :not(:first-child) :not(:last-child) { 
-        border-radius: 0px;
+    :not(:first-child) :not(:last-child) {
+        border-radius: 5px;
     }
+    
 `;

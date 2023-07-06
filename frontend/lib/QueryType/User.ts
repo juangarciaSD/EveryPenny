@@ -2,9 +2,10 @@ export interface User {
     email: string;
     firstName: string;
     lastName: string;
-    phoneNumber: string;
+    phoneNumber?: string;
     uuid: string;
     accounts: Array<Account>
+    bills: Array<Bills>
 }
 
 interface Account {
@@ -17,3 +18,14 @@ interface Account {
     subtype: "checking";
     type: "depository"
 };
+
+export interface Bills {
+    amount: number;
+    category: string;
+    due_date: Date;
+    frequency: string;
+    id: number;
+    name: string;
+    ownerId: string;
+    paid: boolean;
+}

@@ -16,7 +16,7 @@ import { UserLogin, GetMe } from "./src/resolvers/AuthenticationResolver";
 import { UpdateUser } from "./src/resolvers/UserResolver";
 import { PlaidDataResponse } from "./lib/plaid.interface";
 import { AddAccount } from "./src/resolvers/AccountResolver";
-import { AddBill } from "./src/resolvers/BillResolver";
+import { AddBill, UpdateBill } from "./src/resolvers/BillResolver";
 
 const app = express();
 
@@ -152,7 +152,22 @@ app.post('/user/create/bill', async(req, res) => {
         category: req.body.category
     }, req.body.uuid);
 
-    res.send({ success: true, data: billResponse})
+    res.send({ success: true, data: billResponse })
+});
+
+app.post(`/user/update/bill`, async(req, res) => {
+    const updateResponse = await UpdateBill({
+        name: req.body.name,
+        amount: req.body.amount,
+        frequency: req.body.frequency,
+        due_date: req.body.due_date,
+        category: req.body.category,
+        paid: req.body.paid,
+        id: req.body.id,
+        ownerId: req.body.ownerId
+    }, req.body.uuid);
+
+    res.send({ success: true, data: updateResponse });
 });
 
 app.listen(4000, () => {

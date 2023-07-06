@@ -1,6 +1,6 @@
-import { cache } from "react";
 import "lib/firebase";
-import { getAuth, signOut, signInWithEmailAndPassword, User, setPersistence, browserSessionPersistence, onAuthStateChanged, createUserWithEmailAndPassword } from "firebase/auth";
+import { User } from "lib/QueryType/User";
+import { getAuth, signOut, signInWithEmailAndPassword, setPersistence, browserSessionPersistence, onAuthStateChanged, createUserWithEmailAndPassword } from "firebase/auth";
 
 setPersistence(getAuth(), browserSessionPersistence);
 

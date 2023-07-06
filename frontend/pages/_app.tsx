@@ -20,7 +20,7 @@ const AppContainer: NextPage<AppProps> = ({ Component, pageProps }) => {
     const [currentTheme, setCurrentTheme] = React.useState<ThemeColors>("dark");
 
     //TODO: create user type and link to useState type
-    const [currentUser, setCurrentUser] = React.useState<Partial<User> | null>(null);
+    const [currentUser, setCurrentUser] = React.useState<User | null>(null);
     const [authorized, setAuthorized] = React.useState<boolean>(false);
 
     const { pathname, push, ...router } = useRouter();
