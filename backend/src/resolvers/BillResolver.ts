@@ -2,6 +2,8 @@ import { prisma } from "../../lib/prisma";
 import { Bill } from "@prisma/client";
 
 interface AddBillDataInterface extends Omit<Bill, "id" | "ownerId" | "paid"> {}
+interface PaidStatusInterface extends Pick<Bill, "id" | "ownerId" | "paid"> {}
+interface DeleteBillInterface extends Pick<Bill, "id" | "ownerId">{}
 
 export async function AddBill(data: AddBillDataInterface, uuid): Promise<Bill> {
     try {
@@ -18,6 +20,14 @@ export async function AddBill(data: AddBillDataInterface, uuid): Promise<Bill> {
                         due_date: data.due_date,
                         category: data.category || "Other"
                     }
+                }
+            },
+            include: {
+                bills: {
+                    orderBy: {
+                        id: 'desc'
+                    },
+                    take: 1
                 }
             }
         }).then(v => {
@@ -60,5 +70,48 @@ export async function UpdateBill(data: Bill, uuid): Promise<Bill | boolean> {
     } catch(e) {
         console.log(e);
         return e;
+    }
+};
+
+export async function UpdatePaidStatus(data: PaidStatusInterface, uuid) {
+    try {
+        if(uuid != data.ownerId) return false;
+        let paid = await prisma.bill.update({
+            where: {
+                id: data.id
+            }, data: {
+                paid: data.paid
+            }
+        }).then(v => {
+            console.log("update bill paid status");
+            return v;
+        }).catch(e => {
+            console.log("error", e);
+        });
+        return paid;
+    } catch(e) {
+        console.log(e);
+        return;
+    }
+};
+
+export async function DeleteBill(data: DeleteBillInterface, uuid): Promise<boolean> {
+    try {
+        if(uuid != data.ownerId) return false;
+        let deleteBill = await prisma.bill.delete({
+            where: {
+                id: data.id
+            }
+        }).then(v => {
+            console.log("delete bill status", v);
+            return true;
+        }).catch(e => {
+            console.log("error", e);
+            return false;
+        });
+        return deleteBill;
+    } catch(e) {
+        console.log(e);
+        return false;
     }
 }

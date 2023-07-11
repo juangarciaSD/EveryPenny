@@ -22,7 +22,11 @@ const Modal = (props: ModalInterface) => {
         <>
         <div onClick={() => props.setModalState(false)} style={{ display: props.isModalActive ? "flex" : "none", position: "fixed", zIndex: 1, left: 0, 
                 top: 0, width: "100%", height: "100%", overflow: "auto", backgroundColor: "rgba(0,0,0,0.4)"}}>
-            <Div onClick={e => e.stopPropagation()} width={"28%"} height={"90%"} margin={"auto"} padding={"10px"} backgroundColor={theme.background}>
+            <Div onClick={e => e.stopPropagation()} stringStyle={`
+                @media screen and (min-width: 345px) {
+                    width: 90%;
+                }
+            `} minWidth="28%" width={"28%"} height={"90%"} margin={"auto"} padding={"10px"} backgroundColor={theme.background}>
                 <h1 style={{ margin: 0, padding: "10px 10px 0px 10px", color: theme.darkBgTextColor}}>{props.title}</h1>
                 <Div padding={"10px"}>
                     {props.children}

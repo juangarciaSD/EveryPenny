@@ -7,6 +7,7 @@ interface IDiv extends DefaultProps {
     onChange?: (event: React.FormEvent<HTMLDivElement>) => void;
     onClick?: React.MouseEventHandler;
     onMouseLeave?: React.MouseEventHandler;
+    stringStyle?: string
 }
 
 type Ref = HTMLDivElement
@@ -14,7 +15,7 @@ type Props = React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>,
     HTMLDivElement> & IDiv
 
 const Div = React.forwardRef<Ref, Props>((props: IDiv, ref) => (
-    <DivContainer ref={ref} {...props}>
+    <DivContainer ref={ref} stringStyle={props.stringStyle} {...props}>
         {props.children}
     </DivContainer>
 ));

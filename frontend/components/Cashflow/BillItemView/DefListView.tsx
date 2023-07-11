@@ -3,24 +3,31 @@ import {
     DueDateText,
     BillNameText,
     AmountDueHolder,
-    AmountDueText
+    AmountDueText,
+    PaidStatus
 } from "./styles";
 
 interface BillDataInterface {
+    id: number,
     due_date: string
     name: string
     amount: number,
-    onClick?: React.MouseEventHandler<HTMLDivElement>
+    paid: boolean,
+    onClick?: React.MouseEventHandler<HTMLDivElement>,
+    paidOnClick?: React.MouseEventHandler<HTMLDivElement>
 }
 
 const ListItem = (props: BillDataInterface) => {
     return(
-        <BillHolder onClick={props.onClick}>
+        <BillHolder paid={props.paid} data-id={props.id} onClick={props.onClick}>
             <DueDateText>{`${props.due_date}`}</DueDateText>
             <BillNameText>{props.name}</BillNameText>
             <AmountDueHolder>
                 <AmountDueText>${props.amount}</AmountDueText>
             </AmountDueHolder>
+            <PaidStatus paid={props.paid} onClick={props.paidOnClick}>
+                {props.paid ? "Paid" : "Not Paid"}
+            </PaidStatus>
         </BillHolder>
     );
 };
