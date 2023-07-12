@@ -23,6 +23,8 @@ const Modal = (props: ModalInterface) => {
         <div onClick={() => props.setModalState(false)} style={{ display: props.isModalActive ? "flex" : "none", position: "fixed", zIndex: 1, left: 0, 
                 top: 0, width: "100%", height: "100%", overflow: "auto", backgroundColor: "rgba(0,0,0,0.4)"}}>
             <Div onClick={e => e.stopPropagation()} stringStyle={`
+                overflow: auto;
+
                 @media screen and (min-width: 345px) {
                     width: 90%;
                 }
