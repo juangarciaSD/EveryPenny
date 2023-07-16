@@ -284,11 +284,7 @@ const Bills = () => {
                 }]} />
             </Modal>
             <Div display="flex" flexDirection="column" justifyContent="center" width="65%" margin="auto" stringStyle={`
-                @media screen and (min-width: 700px) {
-                    width: 65%!important;
-                }
-
-                @media screen and (min-width: 385px) {
+                @media screen and (max-width: 700px) {
                     width: 100%;
                     margin: auto;
                     white-space: nowrap;
@@ -296,18 +292,27 @@ const Bills = () => {
                 }
             `} padding={0}>
                 <Div minWidth={"65%"} maxWidth={"90%"} width="65%" stringStyle={`
-                    @media screen and (min-width: 385px) {
+                    @media screen and (max-width: 1200px) {
+                        width: 100%;
+                    }
+
+                    @media screen and (max-width: 700px) {
                         width: 100%!important;
+
                     }
                 `} margin={"auto"} padding={0} marginTop={"15px"} marginBottom={0} display="flex" flexDirection="row" justifyContent="space-between">
                     <h2 style={{ margin: 0 }}>Bills</h2>
                     <Button width={"10%"} marginRight={"0px"} minWidth="fit-content" onClick={() => setModalActive(true)}>Link/Add</Button>
                 </Div>
                 <Div stringStyle={`
-                    @media screen and (min-width: 385px) {
+                    @media screen and (max-width: 1200px) {
+                        width: 100%;
+                    }
+
+                    @media screen and (max-width: 700px) {
                         width: 100%!important;
                     }
-                `} minWidth={"65%"} maxWidth={"90%"} width="65%" padding="0px" backgroundColor="transparent" marginTop="15px" margin="auto" overflowY="auto">
+                `} minWidth={"65%"} maxWidth={"90%"} width="65%" padding="0px" backgroundColor="transparent" marginTop="15px" margin="auto">
                     {bills?.sort((a, b) => a.id - b.id).map(val => {
                         return(
                         <BillItem onClick={() => viewBill(val)} paidOnClick={(e) => changePaidStatus(e, val)} id={val.id} paid={val.paid} amount={val.amount} name={val.name} due_date={months[new Date(val.due_date).getMonth()] + " " + new Date(val.due_date).getDate()} />

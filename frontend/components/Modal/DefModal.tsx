@@ -2,6 +2,7 @@ import React from "react";
 import Div from "../Div";
 import Button from "../Button";
 import { useTheme } from "styled-components";
+import { ModalTitle } from "./styles";
 
 interface ModalInterface {
     onCancelModal: React.MouseEventHandler<HTMLButtonElement>,
@@ -25,11 +26,18 @@ const Modal = (props: ModalInterface) => {
             <Div onClick={e => e.stopPropagation()} stringStyle={`
                 overflow: auto;
 
-                @media screen and (min-width: 345px) {
-                    width: 90%;
+                @media screen and (max-width: 1200px) {
+                    width: 50vw;
+                    height: 90vh;
+                }
+
+                @media screen and (max-width: 700px) {
+                    width: 100vw;
+                    height: 100vh;
+                    border-radius: 0px;
                 }
             `} minWidth="28%" width={"28%"} height={"90%"} margin={"auto"} padding={"10px"} backgroundColor={theme.background}>
-                <h1 style={{ margin: 0, padding: "10px 10px 0px 10px", color: theme.darkBgTextColor}}>{props.title}</h1>
+                <ModalTitle style={{ margin: 0, padding: "10px 10px 0px 10px", color: theme.darkBgTextColor}}>{props.title}</ModalTitle>
                 <Div padding={"10px"}>
                     {props.children}
                 </Div>

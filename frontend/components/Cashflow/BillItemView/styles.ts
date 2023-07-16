@@ -13,7 +13,7 @@ export const BillHolder = styled.div<{ paid: boolean }>`
         background-color: ${props => props.theme.canvasBg};
     }
 
-    @media screen and (min-width: 345px) {
+    @media screen and (max-width: 700px) {
         background-color: ${props => props.paid ? "green" : "transparent"};
     }
 `;
@@ -54,7 +54,7 @@ export const PaidStatus = styled.div<{paid: boolean}>`
         border-color: green;
     }
 
-    @media screen and (min-width: 345px) {
+    @media screen and (max-width: 700px) {
         display: none;
     }
 `;

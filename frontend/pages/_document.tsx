@@ -56,6 +56,7 @@ class EveryPenny extends Document {
             <Html lang="en">
                 <Head>
                     <meta charSet="utf-8" />
+                    <meta name="viewport" content="width=device-width, initial-scale=1.0"></meta>
                     <style>{`
                         @tailwind base;
                         @tailwind components;
