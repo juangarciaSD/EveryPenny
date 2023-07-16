@@ -82,9 +82,13 @@ const NavBar = (props: NavBarProps) => {
                     </Button> */}
                     <Button
                         onClick={clearSession}
-                        paddingLeft="15px"
-                        paddingRight="15px"
-                        height="2.5rem"
+                        whiteSpace="nowrap"
+                        padding="7px"
+                        fontSize="14px"
+                        fontWeight="500"
+                        // paddingLeft="15px"
+                        // paddingRight="15px"
+                        // height="2.5rem"  
                         marginRight="10px"
                         background="transparent"
                         hoverOpacity={1}
@@ -92,7 +96,13 @@ const NavBar = (props: NavBarProps) => {
                         border={`2px solid ${theme.accentColor}`}
                         hoverBackgroundColor={`${theme.accentColor}`}
                         hoverColor={`${theme.darkBgTextColor}`}
-                        transition="0.6s">
+                        transition="0.6s"
+                        styleString={`
+                            @media screen and (max-width: 700px) {
+                                font-size: 12px;
+                                margin-right: 0px;
+                            }
+                        `}>
                         Sign Out
                     </Button>
                 </NavButtons>

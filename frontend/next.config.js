@@ -7,7 +7,7 @@ module.exports = {
         FIREBASE_MESSAGING_ID: "605499234472",
         FIREBASE_APP_ID: "1:605499234472:web:c81766cb55c24bf9e68a9d",
         FIREBASE_MEASUREMENT_ID: "G-SBXZVSHJD7",
-        API_DOMAIN: "http://localhost:4000"
+        API_DOMAIN: "http://47.13.38.0:4000"
     },
     webpack5: true,
     webpack: (config, {dev, isServer}) => {

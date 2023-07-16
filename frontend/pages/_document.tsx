@@ -56,7 +56,7 @@ class EveryPenny extends Document {
             <Html lang="en">
                 <Head>
                     <meta charSet="utf-8" />
-                    <meta name="viewport" content="width=device-width, initial-scale=1.0"></meta>
+                    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
                     <style>{`
                         @tailwind base;
                         @tailwind components;
@@ -69,6 +69,14 @@ class EveryPenny extends Document {
                             font-family: system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,Apple Color Emoji,Segoe UI Emoji,sans-serif;
                             overflow: auto;
                             outline: none;
+
+                            @media screen and (-webkit-min-device-pixel-ratio:0) { 
+                                select,
+                                textarea,
+                                input {
+                                  font-size: 16px;
+                                }
+                              }
                         }
 
                         body {
@@ -105,6 +113,25 @@ class EveryPenny extends Document {
 
                         #__next {
                             height: 100%;
+                        }
+
+                        input[type="color"],
+                        input[type="date"],
+                        input[type="datetime"],
+                        input[type="datetime-local"],
+                        input[type="email"],
+                        input[type="month"],
+                        input[type="number"],
+                        input[type="password"],
+                        input[type="search"],
+                        input[type="tel"],
+                        input[type="text"],
+                        input[type="time"],
+                        input[type="url"],
+                        input[type="week"],
+                        select:focus,
+                        textarea {
+                        font-size: 16px;
                         }
                     `}</style>
                 </Head>

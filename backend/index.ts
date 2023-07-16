@@ -26,7 +26,7 @@ app.use(cookieParser());
 
 app.use(cors({
     credentials: true,
-    origin: "http://localhost:3000",
+    origin: ["http://192.168.50.150:3000", "http://47.13.38.0:3000"],
 }));
 
 app.get('/', async(_req, res) => {

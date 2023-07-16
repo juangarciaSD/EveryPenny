@@ -6,6 +6,7 @@ interface IButton extends ButtonProps {
     // displayed text
     text?: string
     hoverBorder?: string,
+    stringStyle?: string
 }
 
 const Button: React.FC<
@@ -19,6 +20,7 @@ const Button: React.FC<
             disabled={props.disabled}
             opacity={props.disabled ? 0.5 : 1}
             hoverBorder={props.hoverBorder}
+            styleString={props.stringStyle}
             {...props}>
             {props.children ?? props.text}
         </ButtonStyle>

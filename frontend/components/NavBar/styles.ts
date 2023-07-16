@@ -19,6 +19,13 @@ export const HeaderContainer = styled.div`
     background-color: transparent;
     padding: 21px;
     margin: 0 auto;
+    max-width: 90%;
+    min-width: 65%;
+
+    @media screen and (max-width: 700px) {
+        padding: 12px 0px;
+        margin: auto;
+    }
 `;
 
 export const NavContainer = styled.div`
@@ -45,6 +52,10 @@ export const NavList = styled.ul`
     list-style: none;
     padding: 0;
     margin: 0;
+
+    @media screen and (max-width: 700px) {
+        display: none;
+    }
 `;
 
 export const NavItem = styled.li<NavBarProps>`

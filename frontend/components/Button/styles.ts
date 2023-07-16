@@ -9,11 +9,14 @@ export interface ButtonProps extends DefaultProps {
     hoverOpacity?: number | string;
     hoverTextColor?: string;
     hoverBorder?: string;
+    styleString?: string;
 
 };
 
 export const ButtonStyle = styled.button<ButtonProps>`
     ${DEFAULT_STYLES}
+    ${props => props.styleString}
+
     border: 2px solid ${props => props.theme.accentColor};
 
     &:hover {

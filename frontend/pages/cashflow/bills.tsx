@@ -188,9 +188,9 @@ const Bills = () => {
         <div style={{ backgroundColor: theme.background, height: "100vh"}}>
             <NavBar />
             <Modal title="Add Bill" isModalActive={modalActive} setModalState={setModalActive} onCancelModal={() => cancel()} onSaveModal={() => saveBill()}> 
-                <Input title="Name" value={name} onChange={e => setName(e.target.value)} width="100%" />
+                <Input title="Name" value={name} onChange={e => setName(e.target.value)} width="100%" type="text" />
                 <Input title="Amount" specialInputText={"$"} value={amount as unknown as string} onChange={e => setAmount(e.target.value)} type="number" width="100%" />
-                <Input title="Date" value={dueDate} onChange={e => setDueDate(e.target.value)} width="100%" />
+                <Input title="Date" value={dueDate} onChange={e => setDueDate(e.target.value)} width="100%" type="text" />
                 <Dropdown title="Frequency" activeValue={frequency} setValue={setFrequency} items={[{
                     name: "Weekly"
                 }, {
@@ -234,7 +234,7 @@ const Bills = () => {
             </Modal>
             {/* view bill modal */}
             <Modal title="View Bill" cancelText="Delete" cancelHoverColor="red" isModalActive={isViewBill} setModalState={setViewBill} onCancelModal={() => deleteCurrentBill()} onSaveModal={() => updateCurrentBill()}>
-                <Input title="Name" value={name} onChange={e => setName(e.target.value)} width="100%" />
+                <Input title="Name" value={name} onChange={e => setName(e.target.value)} width="100%" type="text" />
                 <Input title="Amount" specialInputText={"$"} value={amount as unknown as string} onChange={e => setAmount(e.target.value)} type="number" width="100%" />
                 <Input title="Date" value={dueDate as unknown as string} onChange={e => setDueDate(e.target.value)} width="100%" />
                 <Dropdown title="Frequency" activeValue={frequency} setValue={setFrequency} items={[{
