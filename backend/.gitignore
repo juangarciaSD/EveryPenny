@@ -5,4 +5,4 @@ dist
 
 .env
 
-easypenny-firebase-sdk.json
+# easypenny-firebase-sdk.json

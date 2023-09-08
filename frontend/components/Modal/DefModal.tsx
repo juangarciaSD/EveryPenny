@@ -37,6 +37,14 @@ const Modal = (props: ModalInterface) => {
                     border-radius: 0px;
                 }
             `} minWidth="28%" width={"28%"} height={"90%"} margin={"auto"} padding={"10px"} backgroundColor={theme.background}>
+                
+                {/* @media screen and (-webkit-min-device-pixel-ratio:0) { 
+  select,
+  textarea,
+  input {
+    font-size: 16px;
+  }
+} */}
                 <ModalTitle style={{ margin: 0, padding: "10px 10px 0px 10px", color: theme.darkBgTextColor}}>{props.title}</ModalTitle>
                 <Div padding={"10px"}>
                     {props.children}

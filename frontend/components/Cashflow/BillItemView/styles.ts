@@ -58,3 +58,46 @@ export const PaidStatus = styled.div<{paid: boolean}>`
         display: none;
     }
 `;
+
+export const PreBillHolder = styled.div<{loadedBills: boolean}>`
+    display: ${props => props.loadedBills ? "none" : "block"};
+    width: 100%;
+    padding: 15px 8px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: 200ms ease-in-out;
+    align-items: center;
+    margin-bottom: 12px;
+`;
+
+export const PreDateHolder = styled.div`
+    height: 8px;
+    width: 12%;
+    border-radius: 10px;
+    background-color: gray;
+    margin-right: 12px;
+`;
+
+export const PreTitleHolder = styled.div`
+    height: 8px;
+    width: 32%;
+    border-radius: 10px;
+    background-color: gray;
+`
+
+export const PreAmountHolder = styled.div`
+    height: 8px;
+    width: 12%;
+    border-radius: 10px;
+    background-color: gray;
+    margin-left: auto;
+`
+
+export const PrePaidStatusHolder = styled.div`
+    height: 8px;
+    width: 8%;
+    border-radius: 10px;
+    background-color: gray;
+    margin-left: 8px;
+    padding: 2px 8px;
+`

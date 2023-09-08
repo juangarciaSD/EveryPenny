@@ -9,6 +9,7 @@ import { createBill, deleteBill, getBills, updateBill, updatePaidStatus } from "
 import AppContext from "lib/AppContext";
 import { Bills as BillsInterface } from "lib/QueryType/User"
 import BillItem from "ui/components/Cashflow/BillItemView";
+import { LoadingListView } from "ui/components/Cashflow/BillItemView"
 import Modal from "ui/components/Modal/DefModal";
 
 enum CategoryType {
@@ -49,6 +50,7 @@ const Bills = () => {
 
     //response data
     const [bills, setBills] = React.useState<Array<BillsInterface>>([]);
+    const [loadedBill, isLoadingBill] = React.useState(false);
 
     //get bill and update certain properties
     const getBillAndUpdate = (id: number, data: Partial<BillsInterface>) => {
@@ -177,6 +179,7 @@ const Bills = () => {
 
     React.useEffect(() => {
         setBills(context?.user?.bills);
+        isLoadingBill(true);
     }, [context.user]);
 
     React.useEffect(() => {
@@ -317,6 +320,7 @@ const Bills = () => {
                         return(
                         <BillItem onClick={() => viewBill(val)} paidOnClick={(e) => changePaidStatus(e, val)} id={val.id} paid={val.paid} amount={val.amount} name={val.name} due_date={months[new Date(val.due_date).getMonth()] + " " + new Date(val.due_date).getDate()} />
                     )})}
+                    {[...Array(5)].map(i => <LoadingListView data={loadedBill} />)}
                 </Div>
             </Div>
         </div>
