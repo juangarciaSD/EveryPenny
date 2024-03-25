@@ -1,5 +1,6 @@
 import "lib/firebase";
 import { User } from "lib/QueryType/User";
+import { Router } from "next/router";
 import { getAuth, signOut, signInWithEmailAndPassword, setPersistence, browserSessionPersistence, onAuthStateChanged, createUserWithEmailAndPassword } from "firebase/auth";
 
 setPersistence(getAuth(), browserSessionPersistence);
@@ -15,6 +16,9 @@ export const getCurrentUser = async(): Promise<User | null> => {
     }).then(res => res.json())
     .then((data) => {
         console.log("current user", data)
+        if(data.user === null) {
+            console.log("data returned null", data.user, "end")
+        }
         return data.user;
     });
     return user;
@@ -44,7 +48,6 @@ export const userSignIn = ({
             });
         })
     }).then(() => {
-        console.log("so success???")
         return { success: true }
     }).catch(e => {
         console.log("error has occured while trying to login")

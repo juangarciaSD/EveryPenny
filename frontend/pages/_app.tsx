@@ -31,7 +31,7 @@ const AppContainer: NextPage<AppProps> = ({ Component, pageProps }) => {
         async(user: FirebaseUser) => {
             // waiting for page to finish loading
             if((isLoading && !authorized) || currentUser === null) {
-                console.log("return");
+                push("/auth");
                 return;
             };
             
@@ -60,6 +60,7 @@ const AppContainer: NextPage<AppProps> = ({ Component, pageProps }) => {
             } else {
                 //user is not logged in
                 if(!isLoading && !pages.includes(pathname)) {
+                    console.log("is pushing webpage")
                     push("/auth");
                 };
             }
@@ -74,6 +75,7 @@ const AppContainer: NextPage<AppProps> = ({ Component, pageProps }) => {
                 setAuthorized(true)
                 setLoading(false)
             } else if(!data) {
+                //this works if no use is logged in
                 setCurrentUser(null);
                 setAuthorized(false);
                 setLoading(false)
@@ -82,7 +84,7 @@ const AppContainer: NextPage<AppProps> = ({ Component, pageProps }) => {
     }, [getCurrentUser]);
 
     React.useEffect(() => {
-        const subscriber = firebaseAuthStateChanged(getAuth(), user => onAuthStateChanged(user))
+        const subscriber = firebaseAuthStateChanged(getAuth(), user => onAuthStateChanged(user));
         return () => subscriber();
     }, [onAuthStateChanged]);
 

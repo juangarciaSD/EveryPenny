@@ -117,7 +117,7 @@ const Dashboard = () => {
         <NavBar />
         <Div display="flex" flexDirection="column" justifyContent="center" padding={0}>
             <Div width={"65%"} margin={"auto"} padding={0} marginTop={"15px"} display="flex" flexDirection="row" justifyContent="space-between">
-                <h2 style={{ margin: 0 }}>Hello, {user.firstName + " " + user.lastName}</h2>
+                <h2 style={{ margin: 0 }}>Hello, {user.firstName + " " + user.lastName}!</h2>
                 <Button width={"10%"} marginRight={"0px"} onClick={() => open()}>Link/Add</Button>
             </Div>
             <Div backgroundColor="#fff" width={"65%"}  margin="auto" marginTop={"15px"} padding={"25px"}>

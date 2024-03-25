@@ -1,6 +1,5 @@
 import { clearSession } from "lib/auth";
 import React, { Suspense } from "react";
-import Button from "ui/components/Button"
 import AppContext from "lib/AppContext"
 import { useRouter } from "next/router";
 import Dashboard from "ui/components/Screen/dashboard";

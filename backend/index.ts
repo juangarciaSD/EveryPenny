@@ -38,6 +38,7 @@ app.get('/', async(_req, res) => {
 app.get('/user/current', async(req, res) => {
     let token = req.cookies["everypenny-session"] || req.headers["authorization"] || null;
     let user = await GetMe(token);
+    if(!user) res.send({ success: true, user: null });
     res.send({ success: true, user });
 });
 

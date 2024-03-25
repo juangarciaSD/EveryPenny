@@ -52,6 +52,26 @@ const Bills = () => {
     const [bills, setBills] = React.useState<Array<BillsInterface>>([]);
     const [loadedBill, isLoadingBill] = React.useState(false);
 
+    //bills -> sorted list
+    let sortedBills = bills?.sort((a, b) => Date.parse(a.due_date.toString()) - Date.parse(b.due_date.toString()));
+
+    //find index greater than and less than based off due data - used for realtime data merge without refreshing entire webpage
+    const getDateIndex = (dueDate: string) => {
+        console.log("how many bills?", bills?.length, dueDate)
+        for(let i = 0; i < bills?.length; i++) {
+            if(dueDate >= Date.parse(bills[i].due_date.toString()).toString() && dueDate <= Date.parse(bills[i+1].due_date.toString()).toString()) {
+                return [i, i+1];
+            } else {
+                return null;
+            }
+        };
+        return;
+    };
+
+    React.useEffect(() => {
+        console.log("index returned", getDateIndex("1713243600000"))
+    }, [bills])
+
     //get bill and update certain properties
     const getBillAndUpdate = (id: number, data: Partial<BillsInterface>) => {
         const updatedBills = bills.map(val => {
@@ -70,6 +90,7 @@ const Bills = () => {
     }
 
     const saveBill = async() => {
+        //create new bill and get returned data
         await createBill({
             name: name,
             amount: Number(amount),
@@ -77,21 +98,24 @@ const Bills = () => {
             frequency,
             category,
         }, context.user?.uuid).then(data => data.json())
-        .then(v => {
+        //update app with data returned into array
+        .then(async(v) => {
             if(v.data) {
                 cancel();
                 console.log(v.data.bills[0])
-                let newBill = v.data.bills[0];
+                let bill = v.data.bills[0];
+                //getDateIndex(Date.parse(bill.due_date.toString()).toString())
                 setBills(prev => [...prev, {
-                    name: newBill.name,
-                    amount: Number(newBill.amount),
-                    due_date: Date.parse(newBill.due_date) as unknown as Date,
-                    frequency: newBill.frequency,
-                    category: newBill.category,
-                    id: newBill.id,
-                    ownerId: newBill.ownerId,
-                    paid: newBill.paid
+                    name: bill.name,
+                    amount: Number(bill.amount),
+                    due_date: Date.parse(bill.due_date) as unknown as Date,
+                    frequency: bill.frequency,
+                    category: bill.category,
+                    id: bill.id,
+                    ownerId: bill.ownerId,
+                    paid: bill.paid
                 }]);
+                
             };
         }).catch(e => console.log(e));
     };
@@ -185,7 +209,6 @@ const Bills = () => {
     React.useEffect(() => {
         if(!isViewBill) cancel();
     }, [isViewBill])
-
     return(
         <>
         <div style={{ backgroundColor: theme.background, height: "100vh"}}>
@@ -316,7 +339,8 @@ const Bills = () => {
                         width: 100%!important;
                     }
                 `} minWidth={"65%"} maxWidth={"90%"} width="65%" padding="0px" backgroundColor="transparent" marginTop="15px" margin="auto">
-                    {bills?.sort((a, b) => a.id - b.id).map(val => {
+                    {/* sort list based off due date and not id number */}
+                    {sortedBills?.map(val => {
                         return(
                         <BillItem onClick={() => viewBill(val)} paidOnClick={(e) => changePaidStatus(e, val)} id={val.id} paid={val.paid} amount={val.amount} name={val.name} due_date={months[new Date(val.due_date).getMonth()] + " " + new Date(val.due_date).getDate()} />
                     )})}
